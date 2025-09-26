@@ -1,0 +1,21 @@
+# NUMBER(18, 4) -> Improve accuracy of float values (18 = Numbers before decimal, 4 = Numbers after decimal)
+# VARCHAR is synonymous with STRING but more standard for industry.
+
+TICKER_PROFILES:
+  TICKER: VARCHAR(20)
+  COMPANY_NAME: VARCHAR(255)
+  INDUSTRY: VARCHAR(255)
+  SECTOR: VARCHAR(255)
+  COUNTRY: VARCHAR(30)
+  CLASS: VARCHAR(30)
+  MARKET_CAP: NUMBER(38,0)
+
+TICKER_DATA:
+  DATE: DATE
+  TICKER: VARCHAR(20)
+  OPEN: NUMBER(18,4)
+  HIGH: NUMBER(18,4)
+  LOW: NUMBER(18,4)
+  CLOSE: NUMBER(18,4)
+  ADJ_CLOSE: NUMBER(18,4)
+  VOLUME: BIGINT
