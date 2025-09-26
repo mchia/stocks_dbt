@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: stock_data
+    database: stock_data
+    schema: historical_data
+    tables:
+      - name: ticker_data
+      - name: ticker_profiles
