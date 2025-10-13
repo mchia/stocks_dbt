@@ -1,31 +1,20 @@
-import yaml
-import os
-import snowflake.connector
-from dotenv import load_dotenv
+import pandas as pd
 
-from typing import (
-    Any,
-    Optional
-)
+file_path = "/Users/michaelchia/Documents/Projects/Python/Stocks dbt/athlete_data_1000.csv"
+output_file = "/Users/michaelchia/Documents/Projects/Python/Stocks dbt/test.xlsx"
 
-load_dotenv()
+# Read CSV — keep all columns as strings
+df = pd.read_csv(file_path, dtype=str, keep_default_na=False, encoding="ISO-8859-1")
 
-conn = snowflake.connector.connect(
-            user=os.getenv(key='user'),
-            password=os.getenv(key='password'),
-            account=os.getenv(key='account'),
-            warehouse=os.getenv(key='warehouse'),
-            database=os.getenv(key='database'),
-            schema=os.getenv(key='schema'),
-            role=os.getenv(key='role')
-        )
+# Ensure the timestamp column is treated as text
+# Replace 'timestamp' with your actual column name
+df['Timestamp'] = df['Timestamp'].astype(str)
 
-cursor = conn.cursor()
+# Export to Excel, forcing text format in Excel
+with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+    df.to_excel(writer, index=False)
 
-with open("snowflake_schemas.yaml", "r") as f:
-    schema: Any = yaml.safe_load(f)
-
-for table, columns in schema.items():
-    cols: list[str] = [f"{col} {dtype}" for col, dtype in columns.items()]
-    sql: str = f"CREATE TABLE IF NOT EXISTS {table} ({', '.join(cols)});"
-    cursor.execute(sql)
+    # Force Excel to treat the timestamp column as text
+    worksheet = writer.sheets['Sheet1']
+    for cell in worksheet['A']:  # Replace 'A' with the column letter of your timestamp
+        cell.number_format = '@'  # '@' in Excel means text format
